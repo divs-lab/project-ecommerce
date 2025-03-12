@@ -1,7 +1,7 @@
 
 import './App.css'
 import {Route,Routes} from 'react-router-dom'
-import LoginPage from './components/login'
+import LoginPage from './components/Login'
 
 
 function App(){
