@@ -1,16 +1,21 @@
-import mongoose from "mongoose"; // ✅ Use ES6 import
+import { connect } from 'mongoose';
 
-const connectDB = async (url) => {
-    try {
-        await mongoose.connect(url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log("✅ Connected to the database");
-    } catch (error) {
-        console.error("❌ Error connecting to the database:", error);
-        process.exit(1); // Exit process if connection fails
+const connectDB = async () => {
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is not defined in .env file");
     }
+
+    const conn = await connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 export default connectDB;

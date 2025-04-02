@@ -1,17 +1,24 @@
-import connectDB from './database/db.js';
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-
-dotenv.config();
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./database/db').default;
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-app.get('/',(req,res) => {
-    res.send("API is running...")
+app.use(express.json());
+app.use(cors());
+
+console.log(process.env.MONGO_URI);
+connectDB();
+
+app.get('/', (req, res) => {
+  res.send('API is running...');
 });
 
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
+});
+
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT,() => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
